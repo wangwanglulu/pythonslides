@@ -1,0 +1,806 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Lecture 13</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/white.css" id="theme">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/github.css">
+    <link rel="stylesheet" href="../plugin/chalkboard/style.css">
+    <link rel="stylesheet" href="../plugin/customcontrols/style.css">
+    <link rel="stylesheet" href="../plugin/menu/font-awesome/css/all.css">
+    <!-- 从Lecture10以后缩小代码字体 -->
+    <!-- <link rel="stylesheet" href="../img/tinyfont.css"> -->
+</head>
+
+<body>
+    <div class="reveal" style="background-color: #fff;">
+        <div class="slides">
+            <section data-background-iframe="../particles/demo/index.html" style="text-align: left;">
+                <div style="position: absolute; width: 60%; left: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.6); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+                    <h1 style="color: white">Python Programming</h1>
+                    <h3 style="color: white">Lecture 13 Web Api</h3>
+                </div>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">13.1 Encoding</h2>
+                </section>
+                <section>
+                    <h3>Encoding</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+filename = 'Harry Potter.txt'
+with open(filename, <mark>encoding="utf-8"</mark>) as f_obj:
+    contents = f_obj.read()
+</pre></code>
+                    </div>
+                    <p class="fragment">Character Encoding: ASCII, Unicode, UTF-8, GBK</p>
+                    <div class="fragment"><img data-src="../img/lecture13/ASCII1.png" style="height: 300pt"></div>
+                </section>
+                <section>
+                    <ul>
+                        <li>Two-dimensional code, QR code</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import qrcode
+
+img=qrcode.make("Hello!")
+img.save("x.png")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import qrcode
+
+img=qrcode.make("https://wangwanglulu.com/")
+img.save("wl.png")
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src="../img/lecture13/wl.png" style="height: 200pt"></div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">13.2 Web Api</h2>
+                </section>
+                <section>
+                    <h3 class="fragment">Web Api</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import requests
+
+url = "http://t.weather.itboy.net/api/weather/city/101020100"
+r = requests.get(url)
+print(r.status_code)
+response_dict = r.json()  
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+f = response_dict['data']
+ff = f['forecast']
+ff_today = ff[0]
+ff_1 = ff[1]
+ff_2 = ff[2]
+ 
+def show(day):
+    for x in day:
+        print(x+': '+str(day[x]))
+    print()
+show(ff_today)
+show(ff_1)
+show(ff_2)
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3 class="fragment">ChatGpt</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import openai
+
+openai.api_key = <mark>"Your API KEY"</mark>
+
+messages = [ {"role": "system", "content":
+            "You are a intelligent assistant."} ]
+while True:
+    message = input("User : ")
+    if message:
+        messages.append(
+            {"role": "user", "content": message},
+        )
+        chat = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo", messages=messages
+        )
+    reply = chat.choices[0].message.content
+    print(f"ChatGPT: {reply}")
+    messages.append({"role": "assistant", "content": reply})
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <p>GitHub</p>
+                    <p><a href="https://api.github.com/search/repositories?q=language:python&sort=stars">https://api.github.com/search/repositories?q=language:python&sort=stars</a></p>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+url = 'https://api.github.com/search/repositories?q=language:python&sort=stars'
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+# Make an API call and store the response.
+r = requests.get(url)
+print("Status code:", r.status_code)
+# Store API response in a variable.
+response_dict = r.json()
+
+for keys in response_dict.keys():
+    print(keys)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable data-noescape>
+Status code: 200
+total_count
+incomplete_results
+items
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <a href="https://docs.github.com/en/rest/search?apiVersion=2022-11-28#timeouts-and-incomplete-results">About Incomplete Result</a>
+                    <h3>Timeouts and incomplete results</h3>
+                    <p>To keep the REST API fast for everyone, we limit how long any individual query can run. For queries that exceed the time limit, the API returns the matches that were already found prior to the timeout, and the response has the incomplete_results property set to true. Reaching a timeout does not necessarily mean that search results are incomplete. More results might have been found, but also might not.</p>
+                </section>
+                <section>
+                    <ul>
+                        <li>Working with the Response Dictionary</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+# continue
+print("Total repositories:", response_dict['total_count'])
+
+# Explore information about the repositories.
+repo_dicts = response_dict['items']
+print("Repositories returned:", len(repo_dicts))
+
+# Examine the first repository.
+repo_dict = repo_dicts[0]
+print("\nKeys:", len(repo_dict))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable data-noescape>
+Status code: 200
+Total repositories: 10633864
+Repositories returned: 30
+
+Keys: 80
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+print("\nSelected information about first repository:")
+print('Name:', repo_dict['name'])
+print('Owner:', repo_dict['owner']['login'])
+print('Stars:', repo_dict['stargazers_count'])
+print('Repository:', repo_dict['html_url'])
+print('Created:', repo_dict['created_at'])
+print('Updated:', repo_dict['updated_at'])
+print('Description:', repo_dict['description'])
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable data-noescape>
+Selected information about first repository:
+Name: youtube-dl
+Owner: ytdl-org
+Stars: 120354
+Repository: https://github.com/ytdl-org/youtube-dl
+Created: 2010-10-31T14:35:07Z
+Updated: 2023-05-17T13:04:03Z
+Description: Command-line program to download videos from YouTube.com 
+and other video sites
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li>Visualizing Repositories Using Plotly</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+from plotly.graph_objs import Bar
+from plotly import offline
+
+URL = 'https://api.github.com/search/repositories?q=language:python&sort=star'
+r = requests.get(URL)
+print("Status code:", r.status_code)
+response_dict = r.json()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+repo_dicts = response_dict['items']
+names, stars = [], []
+for repo_dict in repo_dicts:
+    names.append(repo_dict['name'])
+    stars.append(repo_dict['stargazers_count'])
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li>Make visualization</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+data = [{
+    'type': 'bar', 
+    'x': names,
+    'y': stars,
+}]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+my_layout = {
+    'title': 'Most-Starred Python Projects on GitHub',
+    'xaxis': {'title': 'Repository'},
+    'yaxis': {'title': 'Stars'},
+}
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+fig = {'data': data, 'layout': my_layout}
+offline.plot(fig, filename='python_repos.html')
+</code></pre>
+                    </div>
+                    <a class="fragment" href="python_repos.html">Most-Starred Python Projects</a>
+                </section>
+                <section>
+                    <h3>Where to find Web Api? <a href="https://github.com/toddmotto/public-apis">Public APIs</a>, <a href="https://www.juhe.cn/">聚合数据</a></h3>
+                    <a href="https://imdb-api.com/">IMDb-API</a>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+api_key = '<mark>Your API Key</mark>'
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+url=f"https://imdb-api.com/en/API/Top250Movies/{api_key}"
+r = requests.get(url)
+print(r.status_code)
+response_dict = r.json() 
+
+top250 = response_dict["items"]
+print(top250[0])
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable data-noescape>
+{'id': 'tt0111161', 'rank': '1', 'title': 'The Shawshank Redemption', 
+'fullTitle': 'The Shawshank Redemption (1994)', 'year': '1994', 'image': 
+'https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZD
+ViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_Ratio0.6716_AL_.jpg', 
+'crew': 'Frank Darabont (dir.), Tim Robbins, Morgan Freeman', 
+'imDbRating': '9.2', 'imDbRatingCount': '2739500'}
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Downloading Images</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import requests
+
+url="https://m.media-amazon.com/images/\
+M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZ\
+DViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUx\
+ODI@._V1_Ratio0.6716_AL_.jpg"
+r = requests.get(url)
+if r.status_code == 200:
+    with open('The Shawshank Redemption.jpg', 'wb') as f:
+        f.write(r.content)
+else:
+    print("download failed")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Top10</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+api_key = '<mark>Your API Key</mark>'
+
+url=f"https://imdb-api.com/en/API/Top250Movies/{api_key}"
+r = requests.get(url)
+print(r.status_code)
+response_dict = r.json() 
+
+top250 = response_dict["items"]
+top10 = top250[:10]
+print(top10)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+for movie in top10:
+    url = movie['image']
+    title = movie['title']
+
+    r = requests.get(url)
+    if r.status_code == 200:
+        with open(f'{title}.jpg', 'wb') as f:
+            f.write(r.content)
+    else:
+        print("download failed")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>In Theaters</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+api_key = '<mark>Your API Key</mark>'
+
+url=f"https://imdb-api.com/en/API/InTheaters/{api_key}"
+r = requests.get(url)
+print(r.status_code)
+response_dict = r.json() 
+
+in_theaters = response_dict["items"]
+
+for movie in in_theaters:
+    url = movie['image']
+    title = movie['title']
+    print(title)
+
+    r = requests.get(url)
+    if r.status_code == 200:
+        with open(f'{title}.jpg', 'wb') as f:
+            f.write(r.content)
+    else:
+        print("download failed")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Where to find Web Api? <a href="https://github.com/toddmotto/public-apis">Public APIs</a>, <a href="https://www.juhe.cn/">聚合数据</a></h3>
+                    <a href="https://developer.themoviedb.org/docs/">TMDB-API</a>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+api_access = '<mark>Your API Key</mark>'
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+page = 1
+url = f"https://api.themoviedb.org/3/movie/\
+top_rated?language=en-US&page={page}"
+
+headers = {
+    "accept": "application/json",
+    "Authorization": f"Bearer {api_access}"
+}
+response = requests.get(url, headers=headers)
+response_dict = response.json()
+# print(response_dict)
+</code></pre>
+                    </div>
+                                        <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+movies=response_dict["results"]
+
+print(movies[0])
+for key, value in movies[0].items():
+    print(f"{key}: {value}")
+</code></pre>
+                    </div>
+                    
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable data-noescape>
+adult: False
+backdrop_path: /tmU7GeKVybMWFButWEGl2M4GeiP.jpg
+genre_ids: [18, 80]
+id: 238
+original_language: en
+original_title: The Godfather
+overview: Spanning the years 1945 to 1955, a chronicle of the fictional
+ Italian-American Corleone crime family. When organized crime family 
+ patriarch, Vito Corleone barely survives an attempt on his life, his 
+ youngest son, Michael steps in to take care of the would-be killers, 
+ launching a campaign of bloody revenge.
+popularity: 104.261
+poster_path: /3bhkrj58Vtu7enYsRolD1fZdja1.jpg
+release_date: 1972-03-14
+title: The Godfather
+video: False
+vote_average: 8.7
+vote_count: 17922
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Downloading Images</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+
+poster = movies[0]['poster_path']
+img_url = f"https://image.tmdb.org/t/p/w500{poster}"
+r = requests.get(img_url, headers=headers)
+if r.status_code == 200:
+    with open('The Godfather.jpg', 'wb') as f:
+        f.write(r.content)
+else:
+    print("download failed")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Top10</h3>
+                                        <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+api_access = '<mark>Your API Key</mark>'
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+page = 1
+url = f"https://api.themoviedb.org/3/movie/\
+top_rated?language=en-US&page={page}"
+headers = {
+    "accept": "application/json",
+    "Authorization": f"Bearer {api_access}"
+}
+response = requests.get(url, headers=headers)
+response_dict = response.json()
+
+movies=response_dict["results"]
+top10 = movies[:10]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+for movie in top10:
+    poster = movie['poster_path']
+    title = movie['title']
+    img_url = f"https://image.tmdb.org/t/p/w500{poster}"
+    r = requests.get(img_url, headers=headers)
+    if r.status_code == 200:
+        with open(f'{title}.jpg', 'wb') as f:
+            f.write(r.content)
+    else:
+        print("download failed")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Now Playing</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+import requests
+
+api_access = '<mark>Your API Key</mark>'
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+page = 1
+url = f"https://api.themoviedb.org/3/movie/\
+now_playing?language=en-US&page={page}"
+headers = {
+    "accept": "application/json",
+    "Authorization": f"Bearer {api_access}"
+}
+response = requests.get(url, headers=headers)
+response_dict = response.json()
+
+movies=response_dict["results"]
+top10 = movies[:10]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+for movie in top10:
+    poster = movie['poster_path']
+    title = movie['title']
+    img_url = f"https://image.tmdb.org/t/p/w500{poster}"
+    r = requests.get(img_url, headers=headers)
+    if r.status_code == 200:
+        with open(f'{title}.jpg', 'wb') as f:
+            f.write(r.content)
+    else:
+        print("download failed")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3 class="fragment">Stock Market (股票市场)</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+url="http://img1.money.126.net/data/hs/kline/day/history/2022/1399001.json"
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">代码为股票代码，上海股票前加0，如600756变成0600756，深圳股票前加1</li>
+                        <li class="fragment">大盘指数数据查询：上证指数000001前加0，沪深300指数000300股票前加0，深证成指399001前加1，中小板指399005前加1，创业板指399006前加1</li>
+                        <li class="fragment">是否复权，不复权为kline，复权为klinederc</li>
+                    </ul>
+                    <p class="fragment">贵州茅台</p>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import requests
+import matplotlib.pyplot as plt
+
+url="http://img1.money.126.net/data/hs/kline/day/history/2022/0600519.json"
+r = requests.get(url)
+print(r.status_code)
+response_dict = r.json() 
+print(response_dict)
+</code></pre>
+                    </div>
+                </section>
+                <!--                 <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+data = response_dict['data']
+
+for x in data[:5]:
+    print("""日期: {}，开盘价：{}，收盘价：{}，最高价：{}
+        最低价：{}，交易量：{}，涨幅跌幅：{}""".format(x[0],\
+        x[1], x[2], x[3], x[4], x[5], x[6]))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+200
+日期: 20200102，开盘价：1128.0，收盘价：1130.0，最高价：1145.06
+        最低价：1116.0，交易量：14809916，涨幅跌幅：-4.48
+日期: 20200103，开盘价：1117.0，收盘价：1078.56，最高价：1117.0
+        最低价：1076.9，交易量：13031878，涨幅跌幅：-4.55
+日期: 20200106，开盘价：1070.86，收盘价：1077.99，最高价：1092.9
+        最低价：1067.3，交易量：6341478，涨幅跌幅：-0.05
+日期: 20200107，开盘价：1077.5，收盘价：1094.53，最高价：1099.0
+        最低价：1076.4，交易量：4785359，涨幅跌幅：1.53
+日期: 20200108，开盘价：1085.05，收盘价：1088.14，最高价：1095.5
+        最低价：1082.58，交易量：2500825，涨幅跌幅：-0.58
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+date=[]; open_p=[]; close_p=[]; high=[]
+low=[]; volume=[]; percent=[]
+for y in data:
+    date.append(y[0]); open_p.append(y[1])
+    close_p.append(y[2]); high.append(y[3])
+    low.append(y[4]); volume.append(y[5])
+    percent.append(y[6])
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+plt.rcParams['font.sans-serif'] = ['SimHei'] 
+plt.style.use('ggplot')
+plt.plot(close_p, linewidth=0.5)
+plt.scatter(date,close_p, s=5)
+plt.xticks(date[::20],rotation=45,fontsize=6)
+plt.title('贵州茅台收盘价（2020）',fontsize=10)
+plt.tight_layout()
+plt.savefig('maotai2020.jpg',dpi=300)
+</code></pre>
+                    </div>
+                </section> 
+                <section>
+                    <div class="fragment"><img data-src='maotai2020.jpg' style="height: 450pt"></div>
+                </section>
+                <section>
+                    <ul>
+                        <li>Batch Data Visualization</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import os
+import requests
+import matplotlib.pyplot as plt
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def stock_visual(url):
+
+    r = requests.get(url)
+    print(r.status_code)
+    response_dict = r.json() 
+    data = response_dict['data']
+
+    date=[];close_p=[]
+    for y in data:
+        date.append(y[0])
+        close_p.append(y[2])
+    return date, close_p
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+exist=os.path.exists('figures')  
+if not exist:
+    os.mkdir('figures')
+os.chdir('figures')
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+stock_list = ["0600519","0600520","0600521"]
+for x in stock_list:
+    url = "http://img1.money.126.net/data/hs/kline/day/history/2020/{}.json".format(x)
+    x_date, x_close = stock_visual(url)
+    plt.style.use('ggplot')
+    plt.plot(x_close, linewidth=0.5)
+    plt.scatter(x_date,x_close, s=5)
+    plt.xticks(x_date[::20],rotation=45,fontsize=6)
+    plt.title(x+'(2020)',fontsize=10)
+    plt.tight_layout()
+    plt.savefig(x+'.jpg',dpi=300)
+    plt.close()
+</code></pre>
+                    </div>
+                    <div class="fragment"><img data-src='batch.png' style="height: 150pt"></div>
+                </section> -->
+          
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">13.3 Textbook</h2>
+                </section>
+      <section>
+                    <ul>
+                        <li>
+                            <p>Python Crash Couse (Chapters we do not cover: Chapter 12 - 14, 18 - 20)</p>
+                            <ul>
+                                <li>
+                                    <p>Chapter 11: Testing Your Code</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 12 -14: Alien Invasion</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 18 - 20: Django</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Python for Everybody (Chapters we do not cover: Chapter 11 - 13, 15 - 16)</p>
+                            <ul>
+                                <li>
+                                    <p>Chapter 11: Reguler Expressions</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 12: Networked Programs 12.4 - 12.8 (urlib, BeautifulSoup)</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 13: Using Web Services (XML, JSON, API)</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 15: Databases and SQL</p>
+                                </li>
+                                <li>
+                                    <p>Chapter 16: Visualizing data (Network, Word Cloud)</p>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <div class="r-hstack">
+                        <img width="450" height="400" src="../img/lecture13/a3.jpg">
+                        <img width="450" height="400" src="../img/lecture13/a1.png">
+                        <img width="450" height="400" src="../img/lecture13/a2.jpg">
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2c3e50" style="color: white; text-align: left;">
+                    <h2 style="color: white">Summary</h2>
+                    <ul>
+                        <li>Web Api</li>
+                        <ul>
+                            <li>Reading: Python Crash Course, Chapter 17</li>
+                        </ul>
+                    </ul>
+                </section>
+            </section>
+        </div>
+    </div>
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/zoom_old/zoom_old.js"></script>
+    <script src="../plugin/chalkboard/plugin.js"></script>
+    <script src="../plugin/customcontrols/plugin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+    <script src="../plugin/copycode/copycode.js"></script>
+    <script src="../plugin/pdfexport/pdfexport.js"></script>
+    <script>
+    // Also available as an ES module, see:
+    // https://revealjs.com/initialization/
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        customcontrols: {
+            controls: [{
+                    id: 'toggle-overview',
+                    title: 'Toggle overview (O)',
+                    icon: '<i class="fa fa-th"></i>',
+                    action: 'Reveal.toggleOverview();'
+                },
+                {
+                    icon: '<i class="fa fa-pen-square"></i>',
+                    title: 'Toggle chalkboard (B)',
+                    action: 'RevealChalkboard.toggleChalkboard();'
+                },
+                {
+                    icon: '<i class="fa fa-pen"></i>',
+                    title: 'Toggle notes canvas (C)',
+                    action: 'RevealChalkboard.toggleNotesCanvas();'
+                },
+                {
+                    icon: '<i class="fas fa-question-circle"></i>',
+                    title: 'Toggle help',
+                    action: 'Reveal.toggleHelp();'
+                },
+            ]
+        },
+        // Shortcut for toggling between screen and PDF mode
+        pdfExportShortcut: 'E',
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealChalkboard, RevealCustomControls, RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath.KaTeX, CopyCode, PdfExport],
+
+
+
+    });
+    Reveal.configure({
+        pdfSeparateFragments: false
+    });
+    </script>
+</body>
+
+</html>

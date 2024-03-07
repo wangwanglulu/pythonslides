@@ -1,0 +1,1025 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Lecture 9</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/white.css" id="theme">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="../plugin/highlight/github.css">
+    <link rel="stylesheet" href="../plugin/chalkboard/style.css">
+    <link rel="stylesheet" href="../plugin/customcontrols/style.css">
+    <link rel="stylesheet" href="../plugin/menu/font-awesome/css/all.css">
+</head>
+
+<body>
+    <div class="reveal" style="background-color: #fff;">
+        <div class="slides">
+            <section data-background-iframe="../particles/demo/index.html" style="text-align: left;">
+                <div style="position: absolute; width: 60%; left: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.6); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+                    <h1 style="color: white">Python Programming</h1>
+                    <h3 style="color: white">Lecture 9 Advanced Features, File </h3>
+                </div>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.1 Map, Filter, Lambda</h2>
+                </section>
+                <section>
+                    <h3>map()</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def f(x):
+    return x * x
+
+y = map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9])    
+print(list(y))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+[1, 4, 9, 16, 25, 36, 49, 64, 81]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+print(list(map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9])))
+
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+['1', '2', '3', '4', '5', '6', '7', '8', '9']
+</code></pre>
+                    </div>
+                    <h3 class="fragment">filter()</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def k(x):
+    return x%2 == 0
+
+y = list(filter(k, [1, 2, 3, 4, 5, 6, 7, 8, 9]))   
+print(y)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+[2, 4, 6, 8]
+</code></pre>
+                    </div>
+                </section>
+                <!--
+                <section>
+                    
+                    <h3>reduce()</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+from functools import reduce 
+
+def g(x, y):
+    return x * y
+
+y = reduce(g, [1, 2, 3, 4, 5, 6, 7, 8, 9])    
+print(y)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+>>> print(reduce(g, map(f, [1, 2, 3, 4, 5, 6, 7, 8, 9])))
+131681894400
+</code></pre>
+                    </div>
+                
+
+                </section>
+                -->
+                <section>
+                    <h3>Anonymous function: lambda</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def add( x, y ):
+    return x + y
+ 
+lambda x, y: x + y
+ 
+lambda x, y = 2: x + y
+lambda *z: z
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>Sometimes the anonymous function is convenient.</p>
+                        </li>
+                        <li class="fragment">
+                            <p>It has only one expression. (You do not have to use <b>return</b>)</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+print(list(map(lambda x: x * x, [1, 2, 3, 4, 5, 6, 7, 8, 9])))
+</code></pre>
+                    </div>
+                    <!--
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+print(reduce(lambda x,y: x*y, map(lambda x: x**2, [1, 2, 3, 4, 5, 6, 7, 8, 9])))
+
+</code></pre>
+                    </div>
+                -->
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+print(list(filter(lambda x: x%2==0, [1, 2, 3, 4, 5, 6, 7, 8, 9])))
+
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Comprehension Syntax</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>[ expression <b>for</b> value <b>in</b> iterable <b>if</b> condition ]</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+>>> [x * x for x in range(1, 11)]
+[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+>>> [x * x for x in range(1, 11) if x % 2 == 0]
+[4, 16, 36, 64, 100]
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+>>> [m + n for m in 'ABC' for n in 'XYZ']
+['AX', 'AY', 'AZ', 'BX', 'BY', 'BZ', 'CX', 'CY', 'CZ']
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+>>> d = {'x': 'A', 'y': 'B', 'z': 'C' }
+>>> [k + '=' + v for k, v in d.items()]
+['y=B', 'x=A', 'z=C']
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+>>> L = ['Hello', 'World', 'IBM', 'Apple']
+>>> [s.lower() for s in L]
+['hello', 'world', 'ibm', 'apple']
+</code></pre>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.2 Return a Function</h2>
+                </section>
+                <section>
+                    <h3>Closure Function</h3>
+
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def print_msg(msg):
+    def printer():
+        print(msg)
+    return printer
+
+another = print_msg("zen of python")
+print(another())
+</code></pre>
+                    </div>
+<ul>
+                                <li class="fragment">
+                                    <p>We must have a nested function (function inside a function).</p>
+                                </li>
+                                <li class="fragment">
+                                    <p>The nested function must refer to a value defined in the enclosing function.</p>
+                                </li>
+                                <li class="fragment">
+                                    <p>The enclosing function must return the nested function.</p>
+                                </li>
+                            </ul>
+                    <!--
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+f1 = lazy_sum(1, 3, 5, 7, 9)
+f2 = lazy_sum(1, 3, 5, 7, 9)
+print(f1==f2) #False
+</code></pre>
+                    </div>
+                -->
+                </section>
+                <section>
+
+                            <p>When to use closures?</p>
+                            <ul>
+                                <li class="fragment">
+                                    <p>Closures can avoid the use of global values and provides some form of data hiding. It can also provide an object oriented solution to the problem.</p>
+                                </li>
+                            </ul>
+<div class="fragment"><img data-src="../img/lecture9/pic.png" style="height: 250pt"></div>
+
+                </section>
+                <section>
+                    <h3>Example</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def lazy_sum(*args):
+    def calc_sum():
+        ax = 0
+        for n in args:
+            ax = ax + n
+        return ax
+    return calc_sum
+
+f = lazy_sum(1, 3, 5, 7, 9)
+print(f()) 
+print(type(f)) 
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+25
+&lt;class 'function'&gt;
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def make_multiplier_of(n):
+    def multiplier(x):
+        return x * n
+    return multiplier
+
+times3 = make_multiplier_of(3)
+times5 = make_multiplier_of(5)
+
+print(times3(9))
+print(times5(3))
+print(times5(times3(2)))
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Decorator</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>Decorators are "wrappers", which means that they let you execute code before and after the function they decorate without modifying the function itself.</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable data-noescape>
+def new_decorator(a_function_to_decorate):
+    def the_wrapper():
+        <mark>print("Before the function runs")</mark> 
+        <mark>a_function_to_decorate()</mark>
+        <mark>print("After the function runs")</mark>
+    return the_wrapper
+
+def a_function():
+    print("I am a stand alone function.")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+a_function_decorated = new_decorator(a_function)
+a_function_decorated()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Before the function runs
+I am a stand alone function.
+After the function runs
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+@new_decorator
+def another_stand_alone_function():
+    print("Leave me alone")
+
+another_stand_alone_function()  
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Before the function runs
+Leave me alone
+After the function runs
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def bread(func):
+    def wrapper():
+        print("</''''''\>")
+        func()
+        print("<\______/>")
+    return wrapper
+
+def ingredients(func):
+    def wrapper():
+        print("#tomatoes#")
+        func()
+        print("~salad~")
+    return wrapper
+
+def sandwich(food="--ham--"):
+    print(food)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+sandwich()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+
+--ham--
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <!--                     <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+sandwich = bread(ingredients(sandwich))
+sandwich()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+</''''''\>
+ #tomatoes#
+ --ham--
+ ~salad~
+<\______/>
+</code></pre>
+                    </div> -->
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+@bread
+@ingredients # The order matters here.
+def sandwich(food="--ham--"):
+    print(food)
+
+sandwich()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+</''''''\>
+ #tomatoes#
+ --ham--
+ ~salad~
+<\______/>
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Taking decorators to the next level</p>
+                        </li>
+                        <li class="fragment">
+                            <p>Passing arguments to the decorated function</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def passing_arguments(function_to_decorate):
+    def wrapper(arg1, arg2):
+        print(f"I got args! Look: {arg1}, {arg2}")
+        function_to_decorate(arg1, arg2)
+    return wrapper
+
+@passing_arguments
+def print_name(first_name, last_name):
+    print(f"My name is {first_name}, {last_name}")
+
+print_name("Peter", "Venkman")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+I got args! Look: Peter, Venkman
+My name is Peter, Venkman
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>If you're making general-purpose decorator--one you'll apply to any function or method, no matter its arguments--then just use *args, **kwargs:</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def passing_arbitrary_arguments(function_to_decorate):
+    def wrapper(*args, **kwargs):
+        print("Do I have args?:")
+        print(args)
+        print(kwargs)
+        function_to_decorate(*args, **kwargs)
+    return wrapper
+
+@passing_arbitrary_arguments
+def function_with_no_argument():
+    print("Python is cool, no argument here.")
+
+function_with_no_argument()
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Do I have args?:
+()
+{}
+Python is cool, no argument here.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+@passing_arbitrary_arguments
+def function_with_arguments(a, b, c, d):
+    print(a, b, c, d)
+
+function_with_arguments(1,2,3,4)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Do I have args?:
+(1, 2, 3, 4)
+{}
+1 2 3 4
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+
+function_with_arguments(1,2,3,d = "banana")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Do I have args?:
+(1, 2, 3)
+{'d': 'banana'}
+1 2 3 banana
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p><a href="https://stackoverflow.com/questions/739654/how-to-make-a-chain-of-function-decorators/1594484#1594484">Decorator Basics</a></p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="../img/lecture9/rf.png" style="height: 500pt"></div>
+                </section>
+                <section>
+                    <div class="fragment"><img data-src="../img/lecture9/de.png" style="height: 500pt"></div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">9.3 File</h2>
+                </section>
+                <section>
+                    <h3>Reading from a File</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>pi_digits.txt</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+3.1415926535
+8979323846
+2643383279
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+with open('pi_digits.txt') as file_object:
+    contents = file_object.read() # string
+    print(contents.rstrip())
+</code></pre>
+                    </div>
+                                        <div class="fragment">
+                        <pre><code class="output" data-line-numbers data-trim contenteditable>
+3.1415926535
+8979323846
+2643383279
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>File Path</h3>
+                    <ul>
+                        <li class="fragment">
+                            <p>relative path</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+with open('text_files/filename.txt') as file_object: # Linux or OSX
+    pass
+with open('text_files\filename.txt') as file_object: # Windows
+    pass
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>absolute path</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+# Linux or OSX
+file_path = '/home/ehmatthes/other_files/text_files/filename.txt'
+with open(file_path) as file_object:
+    pass
+
+# Windows
+file_path = r'C:\Users\ehmatthes\other_files\text_files\filename.txt'
+with open(file_path) as file_object:
+    pass
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment"><b>Please add "r" if you use Windows.</b></li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Reading Line by Line</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'pi_digits.txt'
+with open(filename) as file_object:
+    for line in file_object:
+        print(line)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+3.1415926535
+
+8979323846
+
+2643383279
+
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'pi_digits.txt'
+with open(filename) as file_object:
+    for line in file_object:
+        print(line.rstrip())
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+3.1415926535
+8979323846
+2643383279
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Making a List of Lines from a File</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'pi_digits.txt'
+
+with open(filename) as file_object:
+    lines = file_object.readlines() #List
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>Working with a File's Contents</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+pi_string = ''
+for line in lines:
+    pi_string = pi_string + line.rstrip()
+print(pi_string)
+print(len(pi_string))
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+3.141592653589793238462643383279 # string
+32
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h3>Writing to a File</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'programming.txt'
+
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming.")
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>The second argument, 'w', tells Python that we want to open the file in write mode. You can open a file 198 Chapter 10 in read mode ('r'), write mode ('w'), append mode ('a'), or a mode that allows you to read and write to the file ('r+'). If you omit the mode argument, Python opens the file in read-only mode by default.</p>
+                        </li>
+                        <li class="fragment">
+                            <p><b>Python can only write strings to a text file. If you want to store numerical data in a text file, you'll have to convert the data to string format first using the str() function.</b></p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Writing Multiple Lines</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'programming.txt'
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming.")
+    file_object.write("I love creating new games.")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+I love programming.I love creating new games.   
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'programming.txt'
+with open(filename, 'w') as file_object:
+    file_object.write("I love programming.\n")
+    file_object.write("I love creating new games.\n")
+
+
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+I love programming.
+I love creating new games.
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Appending to a File</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'programming.txt'
+message.py
+with open(filename, 'a') as file_object:
+    file_object.write("I also love finding meaning in large datasets.\n")
+    file_object.write("I love creating apps that can run in a browser.\n")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+I love programming.
+I love creating new games.
+I also love finding meaning in large datasets.
+I love creating apps that can run in a browser.
+</code></pre>
+                    </div>
+                </section>
+                <!--
+                <section>
+                    <h3>Exceptions</h3>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+print("Give me two numbers, and I'll divide them.")
+print("Enter 'q' to quit.")
+while True:
+    first_number = input("\nFirst number: ")
+    if first_number == 'q':
+        break
+    second_number = input("Second number: ")
+    try:
+        answer = int(first_number) / int(second_number)
+    except ZeroDivisionError:
+        print("You can't divide by 0!")
+    else:
+        print(answer)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Give me two numbers, and I'll divide them.
+Enter 'q' to quit.
+
+First number: 5
+Second number: 0
+You can't divide by 0!
+
+First number: 5
+Second number: 2
+2.5
+First number: q
+</code></pre>
+                    </div>
+                </section>
+            -->
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Handling the FileNotFoundError Exception</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'alice.txt'
+with open(filename) as f_obj:
+    contents = f_obj.read() #Error
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'alice.txt'
+try:
+    with open(filename) as f_obj:
+        contents = f_obj.read()
+except FileNotFoundError:
+    msg = f"Sorry, the file {filename} does not exist."
+    print(msg)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Sorry, the file alice.txt does not exist.
+</code></pre>
+                    </div>
+                    <ul>
+                        <li class="fragment">
+                            <p>ZeroDivisionError</p>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            try-except-else
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'alice.txt'
+try:
+    with open(filename) as f_obj:
+        contents = f_obj.read()
+except FileNotFoundError:
+    msg = f"Sorry, the file {filename} does not exist."
+    print(msg)
+else:
+# Count the approximate number of words in the file.
+    words = contents.split()
+    num_words = len(words)
+    print(f"The file {filename} has about {num_words} words.")
+</code></pre>
+                    </div>
+                </section>
+                <!-- <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Working with Multiple Files</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+def count_words(filename):
+    """Count the approximate number of words in a file."""
+    try:
+        with open(filename) as f_obj:
+            contents = f_obj.read()
+    except FileNotFoundError:
+        msg = "Sorry, the file " + filename + " does not exist."
+        print(msg)
+    else:
+    # Count approximate number of words in the file.
+    words = contents.split()
+    num_words = len(words)
+    print("The file " + filename + " has about " 
+        + str(num_words) +" words.")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+filename = 'alice.txt'
+count_words(filename)
+
+filenames = ['alice.txt', 'siddhartha.txt', 'moby_dick.txt', 'little_women.txt']
+for filename in filenames:
+    count_words(filename)
+</code></pre>
+                    </div>
+                </section> -->
+                <!-- </section>
+            <section>
+                <section data-background="#2980b9" style="color: white">
+                    <h2 style="color: white">11.2 Storing Data</h2>
+                </section> -->
+                <section>
+                    <h3>JSON</h3>
+                    <ul>
+                        <li class="fragment">JSON (JavaScript Object Notation, pronounced /ˈdʒeɪsən/; also /ˈdʒeɪˌsɒn/) is an open standard file format and data interchange format that uses human-readable text to store and transmit data objects consisting of attribute–value pairs and arrays (or other serializable values). It is a common data format with diverse uses in electronic data interchange, including that of web applications with servers.</li>
+                        <li class="fragment">JSON is a <b>language-independent</b> data format. It was derived from JavaScript, but many modern programming languages include code to generate and parse JSON-format data. JSON filenames use the extension .json.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>dump and load</li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import json
+
+numbers = [2, 3, 5, 7, 11, 13]
+filename = 'numbers.json'
+with open(filename, 'w') as f_obj:
+    json.dump(numbers, f_obj)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import json
+
+filename = 'numbers.json'
+with open(filename) as f_obj:
+    numbers = json.load(f_obj)
+print(numbers)
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+[2, 3, 5, 7, 11, 13]
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <ul>
+                        <li class="fragment">
+                            <p>Saving and Reading User-Generated Data</p>
+                        </li>
+                    </ul>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import json
+
+filename = 'username.json'
+
+username = input("What is your name? ")
+with open(filename, 'w') as f_obj:
+    json.dump(username, f_obj)
+    print(f"We'll remember you when you come back, {username}!")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import json
+filename = 'username.json'
+
+with open(filename) as f_obj:
+    username = json.load(f_obj)
+    print(f"Welcome back, {username}!")
+</code></pre>
+                    </div>
+                </section>
+                <section>
+                    <div class="fragment">
+                        <pre><code class="language-Python" data-line-numbers data-trim contenteditable>
+import json
+
+filename = 'username.json'
+try:
+    with open(filename) as f_obj:
+        username = json.load(f_obj)
+except FileNotFoundError:
+    username = input("What is your name? ")
+    with open(filename, 'w') as f_obj:
+        json.dump(username, f_obj)
+        print(f"We'll remember you when you come back, {username}!")
+else:
+    print(f"Welcome back, {username}!")
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+What is your name? Eric #First time
+We'll remember you when you come back, Eric!
+</code></pre>
+                    </div>
+                    <div class="fragment">
+                        <pre><code class="output" data-trim contenteditable>
+Welcome back, Eric!
+</code></pre>
+                    </div>
+                </section>
+            </section>
+            <section>
+                <section data-background="#2c3e50" style="color: white; text-align: left;">
+                    <h2 style="color: white">Summary</h2>
+                    <ul>
+                        <li>File</li>
+                        <ul>
+                            <li>Reading: Python Crash Course, Chapter 10</li>
+                        </ul>
+                    </ul>
+                </section>
+            </section>
+        </div>
+    </div>
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/search/search.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script src="../plugin/math/math.js"></script>
+    <script src="../plugin/zoom_old/zoom_old.js"></script>
+    <script src="../plugin/chalkboard/plugin.js"></script>
+    <script src="../plugin/customcontrols/plugin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+    <script src="../plugin/copycode/copycode.js"></script>
+    <script src="../plugin/pdfexport/pdfexport.js"></script>
+    <script>
+    // Also available as an ES module, see:
+    // https://revealjs.com/initialization/
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        customcontrols: {
+            controls: [{
+                    id: 'toggle-overview',
+                    title: 'Toggle overview (O)',
+                    icon: '<i class="fa fa-th"></i>',
+                    action: 'Reveal.toggleOverview();'
+                },
+                {
+                    icon: '<i class="fa fa-pen-square"></i>',
+                    title: 'Toggle chalkboard (B)',
+                    action: 'RevealChalkboard.toggleChalkboard();'
+                },
+                {
+                    icon: '<i class="fa fa-pen"></i>',
+                    title: 'Toggle notes canvas (C)',
+                    action: 'RevealChalkboard.toggleNotesCanvas();'
+                },
+                {
+                    icon: '<i class="fas fa-question-circle"></i>',
+                    title: 'Toggle help',
+                    action: 'Reveal.toggleHelp();'
+                },
+            ]
+        },
+        // Shortcut for toggling between screen and PDF mode
+        pdfExportShortcut: 'E',
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealChalkboard, RevealCustomControls, RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath.KaTeX, CopyCode, PdfExport],
+
+
+
+    });
+    Reveal.configure({
+        pdfSeparateFragments: false
+    });
+    </script>
+</body>
+
+</html>
